@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello World</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #0f172a; color: #e2e8f0; }
+    button { font-size: 1.2rem; padding: 0.6rem 1.4rem; border: none; border-radius: 8px; background: #38bdf8; color: #0f172a; cursor: pointer; }
+    #time { opacity: 0.7; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Hello, World</h1>
+  <p>Deployed from a Claude chat.</p>
+  <button id="btn">Clicked 0 times</button>
+  <p id="time"></p>
+  <script>
+    let count = 0;
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => { count++; btn.textContent = `Clicked ${count} time${count === 1 ? '' : 's'}`; });
+    const tick = () => { document.getElementById('time').textContent = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' }); };
+    tick(); setInterval(tick, 1000);
+  </script>
+</body>
+</html>
