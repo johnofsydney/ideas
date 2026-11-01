@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garden Palettes</title>
+  <style>
+    :root {
+      --bg: #f6f3ec; --surface: #ffffff; --text: #22261f; --muted: #5d6657;
+      --primary: #4f7a3a; --accent: #c8553d; --on-primary: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Georgia, "Times New Roman", serif; line-height: 1.6;
+      background: var(--bg); color: var(--text);
+      transition: background .5s, color .5s;
+    }
+    header, section, footer, .card, button, .swatch { transition: background .5s, color .5s, border-color .5s; }
+    header { background: var(--primary); color: var(--on-primary); padding: 3rem 1.5rem 2.5rem; }
+    header h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 6vw, 3.2rem); }
+    header p { margin: 0; max-width: 40rem; opacity: .9; }
+    main { max-width: 64rem; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+    h2 { color: var(--primary); }
+    .lead { font-size: 1.15rem; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .card { background: var(--surface); border-top: 6px solid var(--accent); border-radius: 10px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    .card h3 { margin-top: 0; }
+    blockquote { border-left: 4px solid var(--accent); margin: 2rem 0; padding: .5rem 1.2rem; color: var(--muted); font-style: italic; }
+    a { color: var(--accent); }
+    footer { text-align: center; color: var(--muted); padding: 2rem; font-size: .9rem; }
+    #cycle {
+      position: fixed; right: 1rem; bottom: 1rem; z-index: 10;
+      display: flex; align-items: center; gap: .6rem;
+      font: 600 1rem system-ui, sans-serif; padding: .7rem 1.1rem;
+      border: none; border-radius: 999px; cursor: pointer;
+      background: var(--accent); color: var(--on-primary);
+      box-shadow: 0 4px 14px rgba(0,0,0,.2);
+    }
+    .swatches { display: flex; gap: 3px; }
+    .swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,.6); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lorem Ipsum Gardens</h1>
+    <p>Dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  </header>
+
+  <main>
+    <p class="lead">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
+
+    <div class="grid">
+      <div class="card"><h3>Primis in faucibus</h3><p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p></div>
+      <div class="card"><h3>Nullam varius</h3><p>Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.</p></div>
+      <div class="card"><h3>Integer in mauris</h3><p>Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula.</p></div>
+    </div>
+
+    <h2>Excepteur sint occaecat</h2>
+    <p>Cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+
+    <blockquote>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</blockquote>
+
+    <h2>Neque porro quisquam</h2>
+    <p>Est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit. <a href="#">Quis autem vel eum</a> iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.</p>
+  </main>
+
+  <footer>Palette: <span id="name"></span></footer>
+
+  <button id="cycle" aria-label="Next colour scheme">
+    <span class="swatches" id="swatches"></span>
+    <span>Next scheme</span>
+  </button>
+
+  <script>
+    // Each scheme: bg, surface, text, muted, primary, accent, onPrimary.
+    // Placeholders — to be replaced with palettes drawn from garden photos.
+    const schemes = [
+      { name: "Placeholder: Fern", bg: "#f6f3ec", surface: "#ffffff", text: "#22261f", muted: "#5d6657", primary: "#4f7a3a", accent: "#c8553d", onPrimary: "#ffffff" },
+      { name: "Placeholder: Lavender", bg: "#f4f1f8", surface: "#ffffff", text: "#2a2433", muted: "#665d72", primary: "#6b5b95", accent: "#d4a017", onPrimary: "#ffffff" },
+      { name: "Placeholder: Dusk", bg: "#1d2320", surface: "#28302c", text: "#e8ece4", muted: "#a6b0a2", primary: "#7fa36b", accent: "#e8a87c", onPrimary: "#14180f" }
+    ];
+
+    let i = 0;
+    try { i = Number(localStorage.getItem("garden-scheme")) % schemes.length || 0; } catch (e) {}
+
+    function apply(s) {
+      const r = document.documentElement.style;
+      r.setProperty("--bg", s.bg); r.setProperty("--surface", s.surface);
+      r.setProperty("--text", s.text); r.setProperty("--muted", s.muted);
+      r.setProperty("--primary", s.primary); r.setProperty("--accent", s.accent);
+      r.setProperty("--on-primary", s.onPrimary);
+      document.getElementById("name").textContent = s.name;
+      const next = schemes[(i + 1) % schemes.length];
+      document.getElementById("swatches").innerHTML =
+        [next.primary, next.accent, next.bg].map(c => `<span class="swatch" style="background:${c}"></span>`).join("");
+    }
+
+    document.getElementById("cycle").addEventListener("click", () => {
+      i = (i + 1) % schemes.length;
+      try { localStorage.setItem("garden-scheme", i); } catch (e) {}
+      apply(schemes[i]);
+    });
+
+    apply(schemes[i]);
+  </script>
+</body>
+</html>
